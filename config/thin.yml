@@ -1,0 +1,14 @@
+chdir: /var/www/apps/reinventto/current
+environment: production
+address: 0.0.0.0
+port: 3000
+timeout: 30
+log: /var/www/apps/reinventto/shared/log/thin.log
+pid: /var/www/apps/reinventto/shared/pids/thin.pid
+socket: /var/www/apps/reinventto/tmp/thin.sock
+max_conns: 1024
+max_persistent_conns: 100
+require: []
+wait: 30
+servers: 4
+daemonize: true

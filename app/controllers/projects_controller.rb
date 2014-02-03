@@ -6,9 +6,7 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-
-    @projects = Project.all
-
+    @projects = Project.all.with_images
   end
   def decide
     if cookies[:unique_url]
@@ -70,8 +68,6 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # DELETE /projects/1
-  # DELETE /projects/1.json
   def destroy
     @project.destroy
     respond_to do |format|
@@ -80,8 +76,6 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # DELETE /projects/image/1
-  # DELETE /projects/image/1.json
   def destroy_image
     @image = Image.find(params[:id])
     @image.destroy
@@ -91,23 +85,24 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # POST /projects/1/add_image
   def add_image
-    @project.mkdir_images_dir
-    @image = Image.create filename: "", project: @project
-    img_name = "#{ "%09d" % @image.id}.png"
-    image_file = File.join(@project.dir, img_name)
+    @project = Project.where(url: params[:unique_url]).first
+    project = Project.find@project.id 
+    image = project.images.create filename: "#{ project.images.count + 1 }.png"
+    image_file = File.join(image.project.dir, image.filename)
     File.open(image_file, 'wb') do |f|
-      f.write(decode_from_param :image)
+      f.write(decode_from_param(:image))
     end
-    thumb_file = File.join(@project.thumbs_dir, img_name)
+    thumb_file = File.join(image.project.thumbs_dir, image.filename)
     File.open(thumb_file, 'wb') do |f|
-      f.write(decode_from_param :thumb)
+      f.write(decode_from_param(:thumb))
     end
-    @image.filename = img_name
-    @image.save
+    if params[:use_as_base_image] 
+      project.imagebase = image
+      project.save
+    end
     respond_to do |format|
-      format.json { render json: @image.to_json(:methods => [:url, :thumb_url]) }
+      format.json { render json: image.to_json(:methods => [:url, :thumb_url]) }
     end
   end
   def export

@@ -21,7 +21,6 @@ gem "less-rails"
 gem 'capistrano'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -45,6 +44,7 @@ end
 gem 'unicorn'
 gem 'resque'
 gem "capistrano-resque", "~> 0.1.0"
+gem 'rvm-capistrano'
 
 # Use Capistrano for deployment
 # gem 'capistrano', group: :development
@@ -52,6 +52,7 @@ gem "capistrano-resque", "~> 0.1.0"
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 gem 'google-analytics-rails'
+gem 'thin'
 group :development, :test do
   gem 'turn'
   gem 'pry'

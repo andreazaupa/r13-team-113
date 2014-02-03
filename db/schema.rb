@@ -18,10 +18,6 @@ ActiveRecord::Schema.define(version: 20131020133624) do
     t.string   "filename"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "path_file_name"
-    t.string   "path_content_type"
-    t.integer  "path_file_size"
-    t.datetime "path_updated_at"
   end
 
   add_index "images", ["project_id"], name: "index_images_on_project_id"

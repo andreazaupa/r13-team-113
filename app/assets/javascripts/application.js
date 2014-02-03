@@ -26,4 +26,5 @@
 //= require pixastic/actions/solarize
 //= require pixastic/actions/transparent
 //= require turbolinks
+//= require annyang.min.js
 //= require_tree .

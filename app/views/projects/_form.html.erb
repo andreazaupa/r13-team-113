@@ -1,11 +1,25 @@
 <%= form_for @project, :url => { :action => "edit" }, :html => { :id => "form", :class => 'form-horizontal' } do |f| %>
   <div class="control-group">
     <%= render :partial => 'image' %>
+    <div class="container">
+      <div id="images-context" class="slideshow">
+        <% @project.images.each do |image| %>
+          <img class="image-thumb" src="<%= image.thumb_url%>" data-content="<%= image.url %>" data-id="<%= image.id %>" />
+        <% end %>
+      </div>
+      <div id="timelapse"  class="timelapse-box">
+        Take picture each <%= select_tag "take_picture_step", options_for_select(%w(1 2 3 4 5 10 15 20 30 45 60),20), style: "width: 60px;" %>
+      <%= select_tag "take_picture_timeframe", options_for_select(%w(seconds minutes hours), 'seconds') , style: "width: 80px;"%>
+      <%= button_to_function "start", "", id: "start_taking_pictures" %>
+      <%= button_to_function "stop", "", id: "stop_taking_pictures", style: "display:none" %>
+      <span id="countdown_timer"></span>
+    </div>
   </div>
+</div>
+
   <div id="controls" class="control-group">
     <%= image_tag("newprjbutton.png", id: "new-button", title: "New Project") %>
     <%= image_tag("listbutton.png", id: "list-button", title: "List Projects") %>
-    |
     <%= image_tag("configbutton.png", id: "config-button", class: @project.id ? "" : "active", title: "Configuration") %>
     <%= image_tag("plussnapbutton.png", id: "snapshot-button", title: "Snapshot") %>
     <%= image_tag("filterbutton.png", id: "images-button", class: @project.id ? "active" : "", title: "List images") %>
@@ -13,17 +27,11 @@
     <%= image_tag("downloadbutton.png", id: "download-button", title: "Download") %>
   </div>
   <div id="context-container">
-    <div id="images-context" style="display: <%= @project.id ? "block" : "none" %>">
-      <h4>Images</h4>
-      <div>
-        <label><input type="checkbox" id="use_as_base" />Update base image each capture.</label>
-        <label><input type="checkbox" id="mirror" checked="checked" />Mirror Camera.</label>
-      </div>
-      <% @project.images.each do |image| %>
-        <img class="image-thumb" src="<%= image.thumb_url%>" data-content="<%= image.url %>" data-id="<%= image.id %>" />
-      <% end %>
+    <div>
+      <label><input type="checkbox" id="use_as_base" checked="checked" />Update base image each capture.</label>
+      <label><input type="checkbox" id="mirror" checked="checked" />Mirror Camera.</label>
     </div>
-    <div id="config-context" style="display: <%= @project.id ? "none" : "block" %>">
+    <div id="config-context">
       <h4>Configuration</h4>
       <div class="control-group">
 	<%= f.label :name, :class => 'control-label' %>

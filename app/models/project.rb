@@ -5,6 +5,7 @@ class Project < ActiveRecord::Base
   has_many :images, after_add: :set_imagebase_first
   belongs_to :imagebase, class_name: 'Image'
   after_create :mkdir_images_dir
+  scope :with_images, -> { where('id in (select project_id from images)')}
   
   def mkdir_images_dir
     [dir, thumbs_dir].each do |_dir|
